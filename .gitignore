@@ -1,0 +1,22 @@
+# Roblox / Studio
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+*.rbxlx.lock
+*.rbxm
+*.rbxmx
+
+# Studio + editor cruft
+.vscode/
+.idea/
+*.code-workspace
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Scratch
+scratch/
+tmp/
+*.log
