@@ -53,6 +53,24 @@ small. The state machine, failure flow and the numbers are not.
 
 ---
 
+### D-06 — Game code has no version control
+
+**Consequence of the 2026-09-06 decision below.** With no Rojo sync and the place as sole
+source of truth, the Luau in Dino Valley lives only inside a `.rbxl`. There is no history, no
+diff, no rollback and no review — on a codebase we are about to make large, destructive
+changes to. Studio's own version history is the only safety net, and it is coarse.
+
+This does not argue against editing over MCP. It argues for a **one-way export**: periodically
+read every script out of the place and commit the text to `src/` in this repo. Nothing syncs
+back, so the workflow is unchanged — but every change becomes diffable and recoverable.
+
+**Options.** (a) Export before and after each work session. (b) Export at milestones only.
+(c) Accept the risk and rely on Studio history.
+
+**Blocks:** nothing, but the value is highest *before* the first destructive change, not after.
+
+---
+
 ### D-04 — The second, unused codebase
 
 **Conflict.** `ReplicatedStorage.Shared` holds a parallel, largely dead scaffold from an
@@ -89,6 +107,16 @@ systems that depend on them are built. They are not blocking today.
 ---
 
 ## Decided
+
+### 2026-09-06 — The place is the source of truth; MCP is the editing path
+
+`Roblox-Zombie-Arena` will **not** be Rojo-synced into Dino Valley. All iteration happens
+directly in the place over the Studio MCP bridge.
+
+**Reasoning:** confirmed by the user. Removes the risk that direct MCP edits get silently
+overwritten by a sync.
+
+**Consequence — see D-06.** The game code now has no version control at all.
 
 ### 2026-09-05 — Build target is the Dino Valley place
 

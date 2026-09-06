@@ -65,4 +65,15 @@ These are load-bearing. Preserve them unless a decision in
   place or a decision. Newest entry first.
 - When a blocking question is resolved, move it from "Open" to "Decided" in
   [docs/03-open-decisions.md](docs/03-open-decisions.md) with the date and the reasoning.
-- Do not push to GitHub without being asked.
+- Push doc and worklog updates to `master` as part of finishing a session — the user has
+  asked for the written record to live on GitHub. Ask first before anything else (force
+  pushes, branch changes, history rewrites).
+- The remote URL must carry the owning account, or pushes 403. See
+  [docs/WORKLOG.md](docs/WORKLOG.md) 2026-09-06.
+
+## Source of truth
+
+The **place is the source of truth for game code**. `Roblox-Zombie-Arena` is not synced into
+it (decided 2026-09-06) and Rojo is not in use — all iteration happens over the MCP bridge.
+This repo holds documentation and design data. See open decision D-06 on the version-control
+gap that follows from this.
