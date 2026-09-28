@@ -252,9 +252,21 @@ Nothing else can start until this is done.
 
 **Exit:** the MVP slice exit criteria in [05-sdlc-plan.md](archive/05-sdlc-plan.md) §9.
 
-**Total: 26–31 days.** Roughly six working weeks, not four — the greenfield restart costs
-about two weeks against the reskin plan, bought back in a codebase that is version-controlled,
-typed and framework-backed rather than inherited.
+**Total: 39 developer-days** — roughly **eight working weeks**.
+
+> **Revised 2026-09-28.** The phase-level estimate above was 26–31 days. Decomposing the work
+> into the 72 individual tasks in [Dino-Hunt-Tasks.xlsx](../Dino-Hunt-Tasks.xlsx) produced
+> **39.15 days** — about 30% more. The bottom-up number is the one to trust; coarse phase
+> estimates habitually miss the small work, and this one missed roughly a day per phase.
+>
+> Per phase: Toolchain 3.0 · Blockout 6.0 · Wave loop 5.3 · Spine 5.7 · Boss and exploration
+> 6.55 · Collection 6.3 · Players and hardening 6.3.
+>
+> If eight weeks is too long, the lever is **section 6's deferred list, not the estimates**.
+> Cutting the Codex (0.75d), run perks (0.6d) and the fourth creature role would save under
+> two days — the time is in the systems, and every one of them is load-bearing for a playable
+> game. A real cut means dropping a phase, and Phase 5 is the only candidate that leaves
+> something playable.
 
 ---
 

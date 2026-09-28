@@ -11,7 +11,7 @@ When a decision is made, move it down with the date and the reasoning.
 
 ## Open
 
-### D-10 — Roblox Studio MCP not connected
+### D-10 — RESOLVED 2026-09-28: Studio MCP connected
 
 No Studio server is reachable from the session. The previous bridge disconnected and the
 official Roblox MCP has not been connected in its place.
@@ -20,7 +20,7 @@ official Roblox MCP has not been connected in its place.
 
 ---
 
-### D-11 — Where the Dino Hunt place lives
+### D-11 — RESOLVED 2026-09-28: Dino Hunt is placeId 96665470525866
 
 Unknown whether Dino Hunt is a new place inside an existing universe or a new universe, and
 whether it has been saved to Roblox or only exists locally. Rojo needs a known target and the

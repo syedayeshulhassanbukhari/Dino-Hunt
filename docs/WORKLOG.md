@@ -4,6 +4,36 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (later) — Studio bridge live, task tracker built
+
+### Done
+
+- **Connected the Roblox Studio MCP** (`@chrrxs/robloxstudio-mcp`). Plugin installed to
+  `AppData/Local/Roblox/Plugins/MCPPlugin.rbxmx`. Bridge verified against the live place.
+- **Confirmed the place** — Dino Hunt, placeId `96665470525866`, gameId `10768413738`. Saved to
+  Roblox. Essentially blank: ServerScriptService, ReplicatedStorage and StarterGui all empty.
+  This resolves **D-11**.
+- **Built [Dino-Hunt-Tasks.xlsx](../Dino-Hunt-Tasks.xlsx)** — 72 tasks across the seven phases,
+  with dependencies, estimates, priorities, acceptance criteria and FR references. Three sheets:
+  Tasks, Phases (formula rollups), Legend. Verified through Excel: 0 formula errors.
+
+### Estimate revised upward
+
+Decomposing the plan into individual tasks produced **39.15 days against the 26–31 day
+phase-level estimate** — about 30% more, roughly a day per phase. The bottom-up figure is the
+one to trust; `06-project-plan.md` has been corrected rather than left contradicting the
+tracker.
+
+Eight working weeks, not six. The time is in the systems, not in trimmable extras — a
+meaningful cut means dropping a phase, and Phase 5 (the collection loop) is the only one whose
+removal still leaves something playable.
+
+### Next
+
+Phase 0. Task DH-001: install and pin the Rokit toolchain.
+
+---
+
 ## 2026-09-28 — Greenfield restart
 
 The Dino Valley place was deleted and the project restarted from scratch in a new blank place
