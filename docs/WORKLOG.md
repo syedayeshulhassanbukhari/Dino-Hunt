@@ -4,6 +4,46 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 3, playtest 1) — Amber and repair verified, damage instrumented
+
+### Verified from the user's log
+
+- **DH-033 repair.** `Shayankhankhan7 repaired +500 (5000/5000) for 40 credits`, twice.
+  Prompt, hold, credit cost and cooldown all work — and the credits were earned from kills,
+  so the award path works too.
+- **DH-035 / DH-036 / DH-037 Amber.** `REACTOR LEVEL 2 — 255 Amber (threshold 250)` at ~97s
+  into the match, which is the wave 4-5 window the roster sums predicted. Amber only accrues
+  from `CreatureDied` drops credited on shard arrival, so reaching 255 exercises the whole
+  chain: drop, flight, credit, threshold, level-up.
+
+Phase 3 is 5/11; the project is 31/74.
+
+### What the log could not show, and why
+
+**Reactor damage has no log line.** DH-031 and DH-032 could only be *inferred*: the repair
+guard returns early at full health, so the reactor must have been below 5000 both times.
+That is a weak form of evidence, and the `+500 (5000/5000)` line was actively misleading —
+it printed the nominal repair amount, not what was actually restored, so a top-up of 200 HP
+looked like a full 500.
+
+This is the second time instrumentation has been the bottleneck rather than the code. Logging
+every damage tick would bury the run, so the fix is roll-ups:
+
+- **One summary line per wave**: damage taken, damage repaired, peak simultaneous attackers,
+  and the reactor's closing health and percentage.
+- **An ALARM warn** the first time health crosses below 35%, re-armed when a repair lifts it
+  back out. That crossing is the moment a player is meant to change what they are doing, so
+  it earns its own line; nothing else about damage does.
+- **Repair now reports what was actually restored**, computed from before/after.
+
+### Still unverified
+
+DH-034 (defeat at 0 HP) and the three HUD tasks. Defeat needs a run where the reactor is
+allowed to die — `/wave 19` and standing back is the fast route, since wave 19 is ~524 dps
+unopposed against 5000 HP.
+
+---
+
 ## 2026-09-28 (Phase 3 written) — the reactor and the Amber gauge
 
 All twelve modules load-checked clean. Awaiting playtest logs.
