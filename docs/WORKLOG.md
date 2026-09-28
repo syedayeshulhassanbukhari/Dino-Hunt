@@ -4,6 +4,64 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 3 complete) — the reactor is the objective
+
+**Phase 3 is 11/11. The project is 37/74 (48%).** Exit gate met: a run can be won (Phase 2's
+VICTORY) and lost (`DEFEAT on wave 19 — reactor destroyed`), and the reactor is what decides it.
+
+### Verified from the user's log
+
+```
+wave 1 — took 839 damage, repaired 0, peak 14 attacker(s), reactor 4160/5000 (83%)
+ALARM — reactor below 35% (1642/5000)
+reactor destroyed  ->  DEFEAT on wave 19 — reactor destroyed
+```
+
+DH-031, DH-032 and DH-034 done. The HUD tasks (039-041) are marked done on functional
+evidence — mounted clean across three runs with zero client errors, and every attribute it
+reads verified server-side — but **the visual layout has not been reviewed by eye**.
+
+### Balance data, the real value of this run
+
+First real numbers on reactor pressure:
+
+| | Observed | Predicted |
+|---|---|---|
+| Wave 1 damage taken | 839 (17% of the bar) | — |
+| Wave 1 creatures reaching the ring | 14 of 17 | — |
+| Wave 19 reactor lifetime | 26.5s from wave start | ~10s at full contact |
+
+The wave 19 figure reconciles: creatures need ~12s to walk in, so there were only ~14s of
+real contact, averaging ~357 dps against the 524 predicted for all 24 at the ring
+simultaneously. The derivation holds.
+
+**Repair economics work out on paper.** Wave 1 pays roughly 100 credits, which is 2.5 repairs
+= 1250 HP against 839 taken. Sustainable, but not comfortably — which is probably correct.
+
+**The open design question for Phase 6:** 14 of 17 creatures reached the ring on wave 1 while
+the player was actively shooting. Either that is intended — the reactor is meant to take
+damage and be repaired, and the player cannot hold a lane alone — or kill speed and creature
+speed need work. Worth deciding deliberately rather than letting the numbers decide it.
+
+Wave 1 clear time is now **25s**, up from 15s in Phase 2 but still short of the GDD's 40-65s.
+Expected to keep rising as creatures gain real attacks.
+
+### Not implemented, noted
+
+Wave 19's authored event is "No repair until clear". It is printed but not enforced. Phase 6.
+
+### Fixed this session
+
+The per-wave summary only fired on `WaveCleared`, so the wave that destroys the reactor — the
+one whose numbers most need explaining — produced no summary at all. It now also fires on
+`MatchLost`, tagged `LOST` rather than `cleared`.
+
+### Next
+
+Phase 4 — boss and exploration. DH-042: `BossService`, the phase state machine.
+
+---
+
 ## 2026-09-28 (Phase 3, playtest 1) — Amber and repair verified, damage instrumented
 
 ### Verified from the user's log
