@@ -38,6 +38,42 @@ than pulling wholesale.
 
 ## Decided
 
+### 2026-09-28 — No Rojo, no Wally. MCP-only authoring
+
+Code is written directly into the place over the Studio MCP. This **reverses the
+filesystem-source-of-truth decision taken earlier the same day**.
+
+**Reasoning:** user preference for a Claude-Code-plus-MCP workflow without a build step.
+
+**Consequences, accepted:**
+- The game code is **not in git**. Mitigate with periodic `export_rbxm` snapshots committed
+  to this repo — otherwise the only safety net is Studio's coarse place history.
+- Nevermore becomes uninstallable (see below).
+- Phase 0's Rokit, Wally, `default.project.json` and Rojo round-trip tasks (DH-001 to DH-004,
+  DH-007) are void. Selene and StyLua can still be run manually against exported source.
+
+### 2026-09-28 — D-13 resolved: Fusion 0.3, installed from the GitHub release
+
+`Fusion.rbxm` from `dphfox/Fusion` v0.3-beta, imported to `ReplicatedStorage.Fusion`. Verified
+in-place: `version = {major = 0, minor = 3, isRelease = true}`.
+
+0.3 is the scoped API — explicit scopes, `peek()`, no implicit global scope. Every UI module
+must be written against it; 0.2-style Fusion will not run.
+
+### 2026-09-28 — Nevermore dropped
+
+Nevermore ships **no `.rbxm`**; its releases are per-package Wally tags (`@quenty/jecs@1.8.0`)
+across a ~400-package monorepo whose dependencies only Wally resolves. With no package manager
+it cannot be installed.
+
+**Replaced by three hand-written modules** in `ReplicatedStorage.Shared.Util`: `Maid`,
+`Signal` and `ServiceBag`.
+
+**Reasoning:** we would have used perhaps five of Nevermore's packages. Importing a resolved
+Wally graph into a place with no package manager makes every future update a manual
+re-import — the worst of both worlds. Three modules we own and understand is cleaner for this
+workflow.
+
 ### 2026-09-28 — D-10 resolved: Studio MCP connected
 
 `@chrrxs/robloxstudio-mcp` added to the project's MCP config; `MCPPlugin.rbxmx` installed to

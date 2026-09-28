@@ -4,6 +4,55 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 0) — Fusion installed, core utilities written, first build runs
+
+### Decided
+
+- **No Rojo, no Wally. MCP-only authoring.** Reverses the filesystem-source-of-truth decision
+  taken earlier the same day. Code is written directly into the place via `set_script_source`
+  and `execute_luau`.
+  - **Accepted cost: the game code is not in git.** Only docs and the tracker are. Mitigated
+    by DH-073, a periodic `export_rbxm` snapshot committed here.
+- **Nevermore dropped.** It ships no `.rbxm` — its releases are per-package Wally tags across
+  a ~400-package monorepo whose dependencies only Wally resolves. Uninstallable without a
+  package manager. Replaced by three modules we wrote ourselves.
+- **Fusion pinned at 0.3** (`v0.3-beta`, the scoped API). Resolves D-13.
+
+### Done
+
+- **Fusion 0.3 installed** from the official GitHub release `.rbxm` into
+  `ReplicatedStorage.Fusion`. Verified in-place: `version = {major = 0, minor = 3,
+  isRelease = true}`.
+- **Built the structure in-place:** `ReplicatedStorage.Shared.{Config,Net,Types,Util}`,
+  `ServerScriptService.Server.{Services,Bootstrap}`,
+  `StarterPlayerScripts.Client.{Controllers,UI,Bootstrap}`.
+- **Wrote the three Nevermore replacements** in `Shared.Util`:
+  - `Maid` — deterministic cleanup with named slots; connections disconnected before
+    Instances are destroyed, since a connection firing mid-cleanup can touch something
+    already gone.
+  - `Signal` — pure-Luau event with a reused-thread pool. Chosen over BindableEvent because
+    that serialises arguments, so tables cross as copies and metatables are lost — no good
+    for services handing each other creature handles.
+  - `ServiceBag` — two-phase `Init`/`Start` lifecycle. The split is the point: `Init` claims
+    dependencies, `Start` runs only after every service is initialised, so mutually dependent
+    services never observe each other half-built.
+- **Verified in a playtest, not assumed.** Server log `[Dino Hunt] Server started — 0
+  service(s)`; client log `[Dino Hunt] Client HUD live — Fusion 0.3, label reads "Wave 1"`.
+  The label reading "Wave 1" rather than "Pre-wave" proves the Computed followed the Value.
+  Screenshot confirms the HUD renders. No errors.
+
+### Tracker
+
+DH-005, DH-006, DH-008 **Done**. DH-001, DH-002, DH-003, DH-007 **Cut** — void without
+Rojo/Wally. Added DH-073 (export snapshots) and DH-074 (prove the hand-written utilities).
+74 tasks, 39.90 days, Phase 0 at 33%.
+
+### Next
+
+Phase 1. DH-010: blockout the reactor core and defense ring.
+
+---
+
 ## 2026-09-28 (later) — Studio bridge live, task tracker built
 
 ### Done

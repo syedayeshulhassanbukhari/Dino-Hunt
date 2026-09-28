@@ -19,29 +19,47 @@ Current plan: [docs/06-project-plan.md](docs/06-project-plan.md).
 
 ## Source of truth
 
-**The filesystem.** Code lives in `src/`, Rojo syncs it into Studio. This is the reverse of
-the old arrangement and it is deliberate — it puts all gameplay code in git.
+**The place.** No Rojo, no Wally, no filesystem sync — decided 2026-09-28. Code is authored
+directly in the Dino Hunt place over the Studio MCP, using `set_script_source`,
+`edit_script_lines` and `execute_luau`.
 
-**The Studio MCP does not author code.** It is for inspecting the live data model,
-running play-tests, reading the console and capturing screenshots. The single exception is
-world geometry: blockout is built in Studio and committed as `.rbxmx` under `src/assets/`,
-because positioning a map by typing CFrames is worse than doing it visually.
+**Consequence: the game code is not in git.** This repo holds documentation and the task
+tracker only. Periodically export the script tree with `export_rbxm` and commit it, or a
+mistake is unrecoverable beyond Studio's own coarse version history.
 
 ## Stack
 
 | Layer | Choice |
 |---|---|
-| Tools | Rokit → Rojo, Wally, Selene, StyLua |
-| UI and reactive state | **Fusion** |
-| Architecture | **Nevermore** — ServiceBag, Binder, Maid, Signal, Rx |
+| UI and reactive state | **Fusion 0.3** — at `ReplicatedStorage.Fusion` |
+| Architecture | Hand-written — `Maid`, `Signal`, `ServiceBag` in `ReplicatedStorage.Shared.Util` |
 | Types | Luau `--!strict` on new modules |
 
-**The framework split is a rule, not a preference.** Fusion owns the client view layer and
-nothing else. Nevermore owns service lifecycle, tag binding, cleanup and cross-boundary
-events. Do not use Blend. Do not use Fusion for server state.
+**Nevermore is not used.** It is Wally-only and ships no `.rbxm`, so it cannot be installed
+without a package manager. We wrote the three pieces we actually needed instead.
 
-Fusion's API changed significantly at 0.3 (explicit scopes, `peek`). Check the pinned version
-in `wally.toml` before writing a component — do not write from memory of a different version.
+**Fusion 0.3 is scoped.** Create a scope, pass it as the first argument to every constructor,
+destroy the scope to destroy everything made with it, and use `peek()` to read a state object
+outside a `Computed`. There is no implicit global scope — do not write 0.2-style Fusion. The
+reference component is `StarterPlayerScripts.Client.Bootstrap`; follow its shape.
+
+## Where the code lives
+
+| Concern | Path |
+|---|---|
+| Fusion | `ReplicatedStorage.Fusion` |
+| Shared utilities | `ReplicatedStorage.Shared.Util` — Maid, Signal, ServiceBag |
+| **All tunable numbers** | `ReplicatedStorage.Shared.Config` |
+| Remote definitions | `ReplicatedStorage.Shared.Net` |
+| Server services | `ServerScriptService.Server.Services` |
+| Server entry point | `ServerScriptService.Server.Bootstrap` |
+| Client entry point | `StarterPlayer.StarterPlayerScripts.Client.Bootstrap` |
+| Client UI | `StarterPlayer.StarterPlayerScripts.Client.UI` |
+
+A service is a ModuleScript in `Server.Services` returning a table with optional
+`Init(serviceBag)`, `Start()` and `Destroy()`. Bootstrap claims every child automatically —
+adding a service needs no bootstrap edit. Claim dependencies in `Init`, do everything else in
+`Start`.
 
 ## Conventions
 
