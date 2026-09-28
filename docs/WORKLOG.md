@@ -4,6 +4,53 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 2, playtest 2) — five waves verified, dev commands added
+
+### From the user's log (20:37–20:40, waves 1–5)
+
+- **DH-021 Done.** Waves 1–5 cleared in 15 / 30 / 24 / 14 / 32s, each `cleared` firing on the
+  last death, intermission then next wave every time. Scaling exact: hp ×1.07 → ×1.28,
+  dmg ×1.03 → ×1.14 across waves 2–5.
+- **DH-023 Done.** `wave 2 fully spawned — 22 creatures in 12.7s, held by cap on 16 tick(s)`:
+  the first wave over the solo cap of 18 was throttled; the four under it held 0 ticks.
+- Intermissions 15.01s. Reload cycle 1.64s against a 1.6s config. Boss-wave placeholder
+  printed on wave 4. No stalls, no errors.
+- Ammo feedback worked as designed: `empty — reloading` → `reloaded (30)`, repeatedly.
+
+### Two findings from the same log
+
+- **23 consecutive `blocked` on wave 3.** The Pachycephalosaurus had a 25° armour arc I
+  added; the GDD gives it a headbutt, not a shield, and its armour tutorial is the
+  Triceratops at wave 7. Blocked shots at wave 3 with no hit-marker feedback is bad
+  onboarding. **Armour removed from Pachycephalosaurus.** Triceratops 35° and
+  Ankylosaurus 50° stand.
+- **Waves clear in 14–32s against the GDD's 40–65s target.** Expected at this stage —
+  creatures do not attack yet, so there is no pressure to manage. Balance is Phase 6.
+  Also noted for then: the GDD says front armour *reduces* damage; the inherited mechanic
+  *blocks*. Blocking is more readable in grey-box; revisit with real hit feedback.
+
+### Added
+
+- **`DevCommands`** — Studio-only chat commands, guarded on `RunService:IsStudio()`:
+  `/wave N` jumps the match clock (abandons the current wave with no deaths fired, so
+  nothing is rewarded), `/lose` triggers `WaveService:Defeat`. Exists so victory and defeat
+  can be verified without a 25-minute run.
+- `WaveService` match loop now drives `_nextWave` instead of a for-counter so a jump can
+  redirect it.
+
+### A tooling note
+
+The edit peer's `require` cache is stale for any module loaded earlier in the same Studio
+session — a post-edit `require` returned the pre-edit table and its memoised stats. Verify
+edits by reading `.Source`, not by requiring.
+
+### Still to verify
+
+VICTORY (`/wave 20`, then clear it) and DEFEAT (`/lose`) — DH-029, DH-030. The second lane
+opening at wave 6.
+
+---
+
 ## 2026-09-28 (Phase 2, playtest 1) — ammo feedback
 
 ### From the user's log
