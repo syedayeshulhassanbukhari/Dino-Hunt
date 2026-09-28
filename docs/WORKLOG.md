@@ -4,6 +4,60 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 4a, playtest 1) — the boss works; three numbers were wrong
+
+Every system fired. `DH-042`, `DH-043`, `DH-044` done. The value of the run was the three
+things it proved wrong.
+
+### 1. Every pounce missed. 0 of ~25.
+
+Not luck — arithmetic. The telegraph radius was 12 studs and a player covers
+`17.6 x 1.2 = 21 studs` during the warning. **Any** movement escaped, so the attack could
+never land, and the flank window (x1.5 damage) sat permanently open.
+
+Radius 12 -> **16**. Escape now needs 13.3 studs/s, 76% of walk speed: deliberate movement
+still saves you, standing still and shooting does not. The warning stays at 1.2s because
+FR-22 floors it at 1s.
+
+**This is the second time a circle's size has been the bug rather than the code** — the
+defense ring was the first. Ground-attack geometry needs checking against player speed, not
+eyeballed.
+
+### 2. The fight took 187s against a 100s prediction.
+
+The derivation assumed ~120 effective dps, from 140 raw against a 73% magazine duty cycle.
+**Measured: 64 dps.** The estimate ignored everything that is not shooting the boss — killing
+adds, repositioning, aiming.
+
+HP 12,000 -> **7,000**, which is ~109s at the measured rate. The comment in `Config.Bosses`
+now says to start boss 2 from 64 dps, not from the arithmetic.
+
+### 3. The stall warning fired during a legitimate boss fight.
+
+`wave 4 stalled — no deaths for 90s, 1 alive` — correct by its own rule, wrong in substance:
+a 90-150s boss fight with the adds already dead is exactly the intended shape. An active boss
+now counts as liveness.
+
+### Instrumentation added, because two things were invisible
+
+- **Pounce hits are now logged, not just misses.** With only misses printed there was no way
+  to distinguish a dodgeable attack from an impossible one. Hit rate and effective dps are
+  both reported at boss death.
+- **Damage to players is now logged**, rolled up per second. **DH-075 is completely
+  unverified**: the player never came within AttackRange, so creature-on-player damage has
+  still never been observed. Fourteen creatures biting would be ~10 lines a second, hence the
+  rollup rather than per-bite logging.
+
+### Also worth noting
+
+The reactor took **3,170 damage during wave 4** and finished at 46%. Most of that is the boss
+itself: it walks to the ring like any creature and chews the reactor for ~12.6 dps, which over
+187 seconds is ~2,360. Shortening the fight to ~109s should roughly halve it. Whether a boss
+*should* attack the reactor is a real design question — the GDD does not say — but the
+pressure it creates seems right.
+
+---
+
 ## 2026-09-28 (Phase 4a written) — the boss
 
 Boss half of Phase 4 written and load-checked. Exploration follows next.
