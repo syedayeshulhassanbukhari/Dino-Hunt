@@ -4,6 +4,67 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 2 written) — the wave loop, awaiting playtest logs
+
+**Working agreement changed:** the user runs the game; Claude does not start playtests.
+Verification is by the logs the user provides. Recorded in CLAUDE.md. Print lines are now the
+test surface, so every WaveService state change prints one specific line.
+
+### Built (not yet verified in play)
+
+- **`Config.Waves`** — GDD §7 transcribed: 20 waves, solo counts, boss placeholders, events.
+  Species keys are asserted against `Config.Creatures` when WaveService loads, so a typo
+  fails the boot instead of silently skipping a group. 344 solo creatures in total.
+- **`WaveService`** — the match clock. Each wave is a *reservoir* of (species, lane) pairs
+  drained 4 per 0.5s tick while the cap allows; cleared when the reservoir is empty **and**
+  nothing is alive, triggered by `CreatureDied` rather than a timer. 15s intermissions (10s
+  before wave 1). Victory after wave 20. `Defeat(reason)` is real — clears the reservoir,
+  despawns everything, fires `MatchLost` — but nothing calls it until Phase 3's reactor.
+  A stall watch warns if an active wave sees no deaths for 90s.
+- **Multiplayer scaling** per GDD §7.1: budget ×(1 + 0.25·extra), health ×(1 + 0.07·(w−1))
+  ×(1 + 0.15·extra), damage ×(1 + 0.035·(w−1)). `CreatureService:Spawn` takes the
+  multipliers; the record keeps scaled `maxHealth`/`damage` beside the base stats.
+- **Lane opening** reads the blockout's `OpensAtWave` attributes — Jungle Gate 1, River
+  Breach 6, Maintenance Tunnel 11. Spawns round-robin across open lanes.
+- **`ReplicatedStorage.MatchState`** — Phase / Wave / Remaining / TimerEnd as attributes.
+  Server writes, client observes; no remotes. `Client.Bootstrap` now renders real match
+  state: "Wave 3 in 12s", "Wave 3 — 14 remaining", VICTORY, DEFEAT.
+- `_DevSpawner` deleted.
+
+### Boss waves
+
+Waves 4/8/12/16/20 spawn only their adds (8 / 6 / 10 / 9 / 16 creatures) and print
+`BOSS <name> not implemented until Phase 4`. They will clear fast until then.
+
+### A tooling trap, recorded
+
+An edit-mode eval that `require`d `CombatService` hung, because `Remotes` took the client
+branch in edit. That hung thread then blocked **every later require of the same module** —
+Luau waits for an in-progress load — so a second eval also timed out even after the source
+was fixed. The fix was to create the RemoteEvents in the edit DataModel by hand so the stuck
+`WaitForChild` returned. Lesson: a module that yields at top level can wedge the whole edit
+peer's require cache; `Remotes` now treats "not running" as the authority.
+
+### Log lines to look for
+
+```
+[WaveService] match started — 1 player(s), 20 waves
+[WaveService] intermission 10s before wave 1
+[WaveService] wave 1 started — 17 creatures across 1 lane(s), hp x1.00 dmg x1.00 — Jungle Gate only
+[WaveService] wave 1 cleared in 41s
+[WaveService] wave 6 started — 22 creatures across 2 lane(s) ...   <- River Breach open
+[WaveService] wave 4 started — ... BOSS AlphaRaptorMatriarch not implemented until Phase 4
+[WaveService] VICTORY — 20 waves cleared in 24m 10s
+```
+No `[WaveService] wave N stalled` warnings, and no red errors.
+
+### Tracker
+
+DH-025 to DH-028 Done (delivered in Phase 1). DH-021 to DH-024, DH-029, DH-030 **In progress**
+until the logs confirm them.
+
+---
+
 ## 2026-09-28 (Phase 1 complete) — a creature walks a lane and dies to one shot
 
 Exit gate met, with evidence rather than assumption. Phase 1 is 11/11; 16 of 74 overall.

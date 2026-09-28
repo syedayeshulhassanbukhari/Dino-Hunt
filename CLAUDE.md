@@ -87,6 +87,10 @@ Carried forward from the deleted codebase, where they were load-bearing:
 
 ## Working agreement
 
+- **The user runs the game. Claude does not start playtests.** Verification is by logs: the
+  user plays and pastes or points at the output, and Claude reads it with `get_runtime_logs`.
+  Decided 2026-09-28. Print lines are therefore the test surface — make them specific
+  (`[WaveService] wave 3 cleared in 41s`), not generic.
 - Update [docs/WORKLOG.md](docs/WORKLOG.md) when a session changes code or a decision. Newest
   entry first.
 - When a blocking question resolves, move it from "Open" to "Decided" in

@@ -15,6 +15,7 @@ own coarse place history are the entire safety net.
 | `ReplicatedStorage.Shared` | Config, Net, Types, and the Util modules (Maid, Signal, ServiceBag) |
 | `ServerScriptService.Server` | Bootstrap and Services |
 | `StarterPlayer.StarterPlayerScripts.Client` | Bootstrap, Controllers, UI |
+| `ReplicatedStorage.MatchState` | Replicated match attributes the HUD reads (Phase, Wave, Remaining, TimerEnd) |
 | `StarterPack.Rifle` | The rifle Tool and its client script |
 | `ServerStorage.Assets` | Creature rigs the spawner clones |
 
@@ -23,13 +24,13 @@ reinstallable from its GitHub release, and including it would bloat every snapsh
 
 ## Restoring
 
-Import the `.rbxm` into a place and re-parent the six top-level instances to the services
+Import the `.rbxm` into a place and re-parent the seven top-level instances to the services
 named above. Fusion 0.3 must be installed separately from
 `https://github.com/dphfox/Fusion/releases` (the `Fusion.rbxm` asset).
 
 ## Refreshing
 
-Re-export from Studio over MCP with `export_rbxm`, pointing at those same six paths.
+Re-export from Studio over MCP with `export_rbxm`, pointing at those same seven paths.
 Do this at the end of any session that changed code — DH-073.
 
 ## Known limitation
