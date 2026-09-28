@@ -4,6 +4,48 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 1) — Grey-box blockout built
+
+### Done
+
+- **Blockout built in the place**, 63 parts under `Workspace.Map`:
+  - **Plaza** 180x180 centred on the reactor, with a 60-stud defense ring marked on the floor
+    (the line creatures cross to start attacking — FR-11).
+  - **Reactor** at origin: 20x4 base, a neon column topping out at 57 studs with a point light.
+    Deliberately tall — it has to read from the far end of a 130-stud lane.
+  - **Three lanes** N/E/W, 28 wide x 130 long, 14-high walls, spawn markers at the mouths.
+    Each carries an `OpensAtWave` attribute (1 / 6 / 11) matching the GDD's progressive lanes.
+  - **Containment wing**, six bays along the south edge, open faces toward the reactor.
+  - **Four sectors** on the diagonals behind colour-coded gates, each with `SectorId`,
+    `RequiresBoss` and `RequiresReactorLevel` attributes so Phase 4's gating has something to
+    read. Nest and survivor markers in each; hatchery pad in Sector 1.
+- **Snapshot exported** to `snapshot/DinoHunt-Snapshot.rbxm` with a README — the only version
+  control the game code has.
+
+### Three bugs worth recording
+
+- **Cylinder axes.** A Cylinder part's X axis is its length; Y and Z are the diameter. Sizing
+  the defense ring `(60, 0.2, 60)` and rotating it upright produced a 60-stud pillar rather
+  than a flat disc. Correct is `(thickness, diameter, diameter)`.
+- **Hardcoded yaw.** I hardcoded the four sector corridor rotations and got **all four wrong**.
+  Derived correctly it is `yaw = atan2(dir.X, dir.Z)`, giving -45 / 45 / 135 / -135.
+  Deriving beats guessing even when the geometry looks obvious.
+- **Template lighting.** The place ships a custom `Sky`, `Atmosphere`, `Bloom`, `SunRays` and
+  `DepthOfField`. They blurred and dimmed the exact sightlines a blockout exists to test, and
+  the custom Sky drew a moon regardless of `ClockTime`. Stashed to
+  `ServerStorage._StashedLighting` rather than deleted — they are a reasonable starting point
+  for the art pass.
+
+### Tracker
+
+DH-010 to DH-013 and DH-073 **Done**. 8 of 74 tasks, 8.1%.
+
+### Next
+
+DH-014: species table and derivation formulas in `Shared.Config`. Then the first creature.
+
+---
+
 ## 2026-09-28 (Phase 0) — Fusion installed, core utilities written, first build runs
 
 ### Decided
