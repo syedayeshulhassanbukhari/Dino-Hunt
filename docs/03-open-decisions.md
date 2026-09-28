@@ -11,25 +11,6 @@ When a decision is made, move it down with the date and the reasoning.
 
 ## Open
 
-### D-10 — RESOLVED 2026-09-28: Studio MCP connected
-
-No Studio server is reachable from the session. The previous bridge disconnected and the
-official Roblox MCP has not been connected in its place.
-
-**Blocks:** all Studio work — blockout, play-testing, inspection. Phase 0 cannot complete.
-
----
-
-### D-11 — RESOLVED 2026-09-28: Dino Hunt is placeId 96665470525866
-
-Unknown whether Dino Hunt is a new place inside an existing universe or a new universe, and
-whether it has been saved to Roblox or only exists locally. Rojo needs a known target and the
-team needs a known publish destination.
-
-**Blocks:** Phase 0 sync verification.
-
----
-
 ### D-12 — Creature rigging approach
 
 The previous project's fatal content problem was that 20 creatures need non-humanoid rigs and
@@ -56,6 +37,20 @@ than pulling wholesale.
 ---
 
 ## Decided
+
+### 2026-09-28 — D-10 resolved: Studio MCP connected
+
+`@chrrxs/robloxstudio-mcp` added to the project's MCP config; `MCPPlugin.rbxmx` installed to
+`AppData/Local/Roblox/Plugins/`. Bridge verified against the live place.
+
+Note this is a community package, not Roblox's own `studio-rust-mcp-server`. Worth revisiting
+if it proves unreliable.
+
+### 2026-09-28 — D-11 resolved: the Dino Hunt place
+
+**placeId `96665470525866`, gameId `10768413738`**, saved to Roblox. Effectively blank —
+ServerScriptService, ReplicatedStorage and StarterGui all empty. This is the Rojo sync target
+and the publish destination.
 
 ### 2026-09-28 — Greenfield rebuild on Fusion and Nevermore
 
