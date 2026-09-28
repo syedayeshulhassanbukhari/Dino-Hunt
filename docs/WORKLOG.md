@@ -4,6 +4,71 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 3 written) — the reactor and the Amber gauge
+
+All twelve modules load-checked clean. Awaiting playtest logs.
+
+### The three numbers the GDD never gave
+
+`01-gdd-review` flagged that reactor HP, damage-to-reactor and repair rate are undefined.
+Derived rather than guessed, from one design statement recorded in `Config.Game`:
+
+> "A full solo wave that reaches the reactor unopposed destroys it in about 30 seconds at
+> wave 1, and about 10 at wave 19."
+
+- **MaxHealth 5000.** Verified by computation: wave 1 unopposed is **159 dps → 31s**; wave 19
+  is **524 dps → 9s**. Both ends land where the statement says.
+- **AttackInterval 2.5s, uniform** — deliberately NOT the per-role interval. A swarmer
+  nibbling a building every 1.2s makes a crowd delete it faster than any elite, which reads
+  as wrong. This preserves "bigger creature hurts the objective more".
+- **Repair +500 HP for 40 Credits**, 1s cooldown, 26-stud range. 10% of the bar per press:
+  worth crossing the plaza for, not enough to out-heal a wave.
+
+### Amber
+
+Thresholds 250 / 600 / 1050 / 1600 (GDD §4.4) checked against the actual roster — solo income
+reaches **339 / 740 / 1287 / 1910** by waves 4 / 8 / 12 / 16, so every level lands just before
+its boss. **DH-038 Done**: `Game.amberThreshold` scales them with party size (six players:
+563 / 1350 / 2363 / 3600, ×2.25 matching the spawn-budget income), which corrects the GDD's
+flat thresholds — the defect raised in `01-gdd-review` §3.
+
+Amber is server-owned end to end: no pickup, no backpack. A shard tweens to the reactor and
+the value is credited **on arrival**, so the gauge never runs ahead of the visual. The
+level-up check is a `while`, not an `if` — a late shard can cross two thresholds at once.
+
+### Design notes
+
+- **One attacker set, one loop.** Creatures at the ring join a set that a single Heartbeat
+  tick drains; at 60 concurrent creatures that is one timer instead of sixty.
+- **Creatures turn to face the reactor on arrival.** Not cosmetic: the armour arc is measured
+  off facing, so flanking a Triceratops at the ring has to mean something.
+- Damage is gated to `Phase == Active`, which is also how Phase 4's exploration window will
+  suspend it for free (FR-32).
+- `MatchLost` clears the attacker set — a wipe fires no deaths, so nothing else would.
+- HUD moved out of Bootstrap into `Client.UI.Hud` + `Client.UI.Theme`. Bars are sprung so a
+  hit reads as movement; the Amber gauge fills toward the *next* threshold rather than from
+  zero, or it would barely move between levels 4 and 5.
+
+### A tooling trap that invalidated earlier checks
+
+**The edit peer caches `require` per ModuleScript instance for the whole Studio session.**
+Re-requiring an edited module returns the stale table and never re-parses the source — so a
+syntax error passes a "load check" silently, and stale values come back (this surfaced as
+`Game.amberThreshold` being nil right after it was added). Load checks now **clone** the
+containing folders into a temp parent and require the clones. Recorded in CLAUDE.md.
+
+### What to look for
+
+```
+[ObjectiveService] reactor online — 5000 HP, level 1, next Amber 250
+[ObjectiveService] REACTOR LEVEL 2 — 251 Amber (threshold 250)
+[ObjectiveService] <name> repaired +500 (3200/5000) for 40 credits
+[ObjectiveService] reactor destroyed
+[WaveService] DEFEAT on wave N — reactor destroyed
+```
+
+---
+
 ## 2026-09-28 (Phase 2 complete) — victory and defeat verified
 
 Phase 2 is **10 of 10**. The user asked Claude to run these two tests directly.

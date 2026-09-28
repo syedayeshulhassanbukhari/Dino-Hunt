@@ -91,6 +91,11 @@ Carried forward from the deleted codebase, where they were load-bearing:
   user plays and pastes or points at the output, and Claude reads it with `get_runtime_logs`.
   Decided 2026-09-28. Print lines are therefore the test surface — make them specific
   (`[WaveService] wave 3 cleared in 41s`), not generic.
+- **Load-check edited modules by CLONING them, never by requiring them in place.** The edit
+  peer caches `require` per ModuleScript instance for the whole Studio session, so requiring
+  an edited module returns the stale table and never re-parses the source — a syntax error
+  passes silently. Clone the containing folder into a temp parent, require the clones
+  (relative `script.Parent.X` resolves inside the clone), then destroy it.
 - Update [docs/WORKLOG.md](docs/WORKLOG.md) when a session changes code or a decision. Newest
   entry first.
 - When a blocking question resolves, move it from "Open" to "Decided" in
