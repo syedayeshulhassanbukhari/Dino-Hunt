@@ -4,6 +4,57 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 2 complete) — victory and defeat verified
+
+Phase 2 is **10 of 10**. The user asked Claude to run these two tests directly.
+
+### Victory (DH-029)
+
+`/wave 20` sent through the real chat path → `DevCommands` → `WaveService:JumpToWave`:
+
+```
+[WaveService] dev jump — wave 1 abandoned, next is 20
+[WaveService] wave 20 started — 16 creatures across 3 lane(s), hp x2.33 dmg x1.67 — Final — BOSS ChronoRex not implemented until Phase 4
+[WaveService] wave 20 cleared in 157s
+[WaveService] VICTORY — 20 waves cleared in 3m 27s
+```
+
+HUD read VICTORY / All 20 waves cleared in green. **3 lane(s)** also verifies the lane-opening
+logic across all three thresholds. A scripted client shooter did the killing: 552 shots,
+standing 10 studs behind each target — the Triceratops took `hit`s, not `blocked`, which is
+the armour flank rule working in play.
+
+### Defeat (DH-030)
+
+`/lose` on wave 1 with 17 creatures on the field: **17 → 0 instantly**, phase Active → Defeat,
+`DEFEAT on wave 1 — dev command /lose`, HUD in red, no deaths fired, no stall warning.
+
+**Bug found and fixed:** `Defeat()` published `Remaining` *before* `DespawnAll()`, so the
+replicated attribute still read 17 after the wipe. Cosmetic today (the Defeat HUD line does
+not show it); wrong for anything else that reads it. Despawn now precedes publish.
+
+### Tooling notes
+
+- `TextChannel:SendAsync()` **never returns for a command message**. Fire it inside
+  `task.spawn` or everything after it is dead code — the first attempt lost the shooter
+  thread that way.
+- A blocking client eval that polls an attribute for ~27s is a usable sleep: the MCP
+  waiter times out at 30s, and there is no other way to wait from this side.
+
+### Phase 2 exit gate
+
+"A full 20-wave run completes" — met. Waves 1–5 cleared by the user's own play; wave 20
+reached by dev jump and cleared by scripted fire; every intermission, scaling multiplier and
+lane threshold matched its config exactly.
+
+### Next
+
+Phase 3 — the spine. DH-031: reactor instance with server-owned HP. Creatures at the ring
+finally get something to attack, which is also what will bring wave times up from the
+current 14–32s toward the 40–65s target.
+
+---
+
 ## 2026-09-28 (Phase 2, playtest 2) — five waves verified, dev commands added
 
 ### From the user's log (20:37–20:40, waves 1–5)
