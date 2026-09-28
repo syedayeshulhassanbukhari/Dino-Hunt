@@ -4,6 +4,82 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 4a written) — the boss
+
+Boss half of Phase 4 written and load-checked. Exploration follows next.
+
+### A gap in my own task list
+
+**Creatures never damaged players.** `Config.Creatures` has carried `damage`,
+`AttackInterval` and `AttackRange` since Phase 1 and nothing used them — creatures walked
+past you to the reactor. No task covered it; Phase 6 has downed/revive but nothing said
+"creatures can hurt you".
+
+A boss whose telegraphed pounce cannot hurt anyone is a punching bag, so the boss work needed
+it. Added as **DH-075** rather than folded in silently. 75 tasks now.
+
+Implemented per GDD §3.2 — "dinosaurs prefer nearby players but attack the reactor when they
+reach its defense ring". They do **not** chase: a creature walks its lane and bites whoever
+steps into reach. Chasing needs real pathfinding and would break "everything is outrunnable"
+in spirit, since a player could never disengage. One Heartbeat loop for all creatures, the
+same pattern as the reactor tick.
+
+### Boss design
+
+`Config.Bosses` holds definitions; `BossService` reads it and nothing else, so boss 2 should
+be a table entry plus any new attack verbs.
+
+**Alpha Raptor Matriarch**, 12,000 HP solo. Derived: the rifle is 140 dps raw, but a 30-round
+magazine against a 1.6s reload is a 73% duty cycle => ~102 dps sustained, ~120 with some weak
+points. 12,000 / 120 = **100 seconds**, inside the GDD's 90-150s band.
+
+Three phases on health fractions — Hunt, Pack (summons 6 raptors, 3s invulnerable), Frenzy
+(pounce every 2.5s). Every FR-25 verb is present: summons, hunter mark, leap, and a flank
+window (x1.5 damage for 4s) when a pounce lands on nobody.
+
+**Player scaling deviates from the GDD deliberately.** §7.1 says boss HP scales
+1 + 0.50 x (players-1) = 3.5x at six players against roughly 6x incoming damage, so a full
+party kills a boss in half a solo player's time. That inversion is defect #4 in
+01-gdd-review. Using 0.85 per extra player gives 5.25x, close enough to linear that party
+size stops being an exploit.
+
+### Rules enforced in code, not trusted to data
+
+- **FR-21** the 8-second invulnerability ceiling is clamped in `BossService`, with a warn if a
+  phase asks for more. The longest window actually used is printed at boss death.
+- **FR-22** telegraph lead time. The indicator marks where the target is *now* and resolves
+  there after the warning — a promise about a place, not a homing missile, so moving out is
+  always the right answer.
+- **FR-23** the checkpoint reward is granted on death, immediately, so losing wave 17 cannot
+  erase having beaten boss 4.
+- **FR-24** phase transitions respawn defeated players.
+
+Statically verified: boss slower than the player (16.5 < 17.6), pounce does not one-shot
+(34 < 100), warning >= 1s, every phase under the invulnerability cap.
+
+### Design note
+
+The boss is registered as a **normal CreatureService record** with `isBoss`, so CombatService
+shoots it, the armour arc applies, ObjectiveService sees it hit the reactor, and the wave
+clear check counts it — all unchanged. A separate boss entity would have forced every
+consumer to check two places for "is this shootable". Bosses skip the pool, because a scaled
+model returned to it would come back out at the wrong size.
+
+### What to look for
+
+```
+[BossService] Alpha Raptor Matriarch spawned on LaneNorth_JungleGate — 12000 HP (1 player(s)), 3 phases
+[BossService] Alpha Raptor Matriarch phase 1/3 — Hunt
+[BossService] marked hunter: <name>
+[BossService] pounce missed — flank open for 4.0s (x1.50 damage)
+[BossService] Alpha Raptor Matriarch phase 2/3 — Pack
+[BossService] summoned 6/6 Velociraptor, invulnerable 3.0s
+[BossService] Alpha Raptor Matriarch DEFEATED in 104s — longest invulnerability 3.0s (cap 8s), 1 boss(es) cleared
+[BossService] checkpoint reward — 250 credits to 1 player(s)
+```
+
+---
+
 ## 2026-09-28 (market scan) — a competitor's collapse is the most useful data we have
 
 Searched the Roblox catalogue, Rolimon's, DevForum and Wikipedia's game list to answer "does
