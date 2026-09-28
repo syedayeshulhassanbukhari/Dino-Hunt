@@ -15,19 +15,21 @@ own coarse place history are the entire safety net.
 | `ReplicatedStorage.Shared` | Config, Net, Types, and the Util modules (Maid, Signal, ServiceBag) |
 | `ServerScriptService.Server` | Bootstrap and Services |
 | `StarterPlayer.StarterPlayerScripts.Client` | Bootstrap, Controllers, UI |
+| `StarterPack.Rifle` | The rifle Tool and its client script |
+| `ServerStorage.Assets` | Creature rigs the spawner clones |
 
 `ReplicatedStorage.Fusion` is deliberately **not** included — it is a third-party dependency
 reinstallable from its GitHub release, and including it would bloat every snapshot.
 
 ## Restoring
 
-Import the `.rbxm` into a place and re-parent the four top-level instances to the services
+Import the `.rbxm` into a place and re-parent the six top-level instances to the services
 named above. Fusion 0.3 must be installed separately from
 `https://github.com/dphfox/Fusion/releases` (the `Fusion.rbxm` asset).
 
 ## Refreshing
 
-Re-export from Studio over MCP with `export_rbxm`, pointing at those same four paths.
+Re-export from Studio over MCP with `export_rbxm`, pointing at those same six paths.
 Do this at the end of any session that changed code — DH-073.
 
 ## Known limitation

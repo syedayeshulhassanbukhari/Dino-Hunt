@@ -4,6 +4,67 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 1 complete) — a creature walks a lane and dies to one shot
+
+Exit gate met, with evidence rather than assumption. Phase 1 is 11/11; 16 of 74 overall.
+
+### Built
+
+- **`Shared.Config.{Game,Creatures,Weapons}`** — the numbers. Fifteen species, one `lp` each;
+  `HP = 20 × lp`, `damage = 5 × √lp`, rewards on `√lp`. Load-time asserts fail loudly if any
+  role is not slower than the player's 17.6, or any species could one-shot a player.
+  The GDD's absolute HP bands (§5.1) are deliberately not used — their *ratios* are, because
+  the one-shot invariant fixes the absolute scale. Basis: Compsognathus 20 HP = rifle 20 dmg.
+- **Four grey-box rigs** in `ServerStorage.Assets.Creatures` — Swarmer, Flanker, Armoured,
+  Ranged. Distinct silhouettes, one flat colour each, no animation. One skeleton contract:
+  `HumanoidRootPart` primary, `Head` is the weak point, `ArmourPlate` on the Armoured rig.
+- **`CreatureService`** — pool per rig, one server-wide cap `min(18 × live, 60)`, two derived
+  waypoints per lane, damage and death owned in one place. Signals: `CreatureSpawned`,
+  `CreatureDied`, `CreatureReachedReactor` (Phase 3's ObjectiveService hooks the last).
+- **`CombatService`** — validates weapon, fire interval (10% slack), ammo, origin drift;
+  raycasts server-side; friendly fire excluded. Directional armour factored into a pure
+  `isBlockedByArmour()`.
+- **`PlayerService`** — applies the 17.6 walk speed so the invariant actually holds.
+- **Rifle** tool + `RifleClient`; **`_DevSpawner`** (throwaway, gated on `workspace.DevSpawn`).
+
+### Evidence
+
+- Pathing: **6/6 creatures reached the defense ring** in each of three runs.
+- One-shot: a Compsognathus died on a single `kill` confirm during the user's own playtest;
+  every other kill's arithmetic is exact (Triceratops 8 hits + kill = 9 × 20 = 180).
+- Armour: **10/10 unit cases** — ±34° blocked, 36°+ lands, elevation ignored, no-armour
+  species never blocked, Ankylosaurus 50° arc holds at 45°.
+- Boot: `Server started — 4 service(s)`, zero errors, after every edit.
+
+### Bugs found and fixed
+
+- **Luau parse:** `(task :: () -> ())()` — a call on a parenthesised cast to a function
+  type — is a syntax error. Cast to a local first. This took the server down on first boot;
+  the symptom was "no Server started line", not a helpful error at the call site.
+- **`SetStateEnabled` is runtime state, not a property.** Disabling `Dead` on the template
+  rig does nothing for clones; it has to be re-applied on every spawn or the Humanoid kills
+  itself at 0 HP before the service can.
+- **MoveTo's 8-second timeout** on a 9-second lane. Re-issued before the deadline. And
+  `MoveToFinished:Wait()` never fires for a creature parented to nil mid-walk — that would
+  leak the thread — so arrival is polled.
+- **Edit-mode `require` hung.** `RunService:IsServer()` is false in Studio edit, so Remotes
+  took the client branch and `WaitForChild`'d forever; the MCP eval wedged. Anything not
+  actively running now acts as the authority.
+
+### Two facts about testing over the MCP worth keeping
+
+- The server peer's `require` has **its own module cache** — it cannot see a live service's
+  state. Test pure functions that way; test integration through the real remote path.
+- A human play-tester will kill your test subjects. The scripted armour shot started 5s after
+  the user had already killed the Triceratops. Factoring the logic pure was the right answer,
+  not a longer wait.
+
+### Next
+
+Phase 2, DH-021: `WaveService` with 20 finite waves. `_DevSpawner` is deleted when it lands.
+
+---
+
 ## 2026-09-28 (Phase 1) — Grey-box blockout built
 
 ### Done
