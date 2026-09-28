@@ -20,6 +20,7 @@ Code lives in `src/` and syncs into Studio via Rojo. The filesystem is the sourc
 | [Primal_Rift_MVP_Game_Design_Document.docx](Primal_Rift_MVP_Game_Design_Document.docx) | The design spec. v1.1, 26 Aug 2026. |
 | [docs/01-gdd-review.md](docs/01-gdd-review.md) | Review of that spec — contradictions, missing numbers, balance defects. Read before implementing anything it touches. |
 | [docs/03-open-decisions.md](docs/03-open-decisions.md) | Decisions that block work, and the log of settled ones. |
+| [docs/07-market-scan.md](docs/07-market-scan.md) | Who else is making this on Roblox, and what their numbers say. |
 | [docs/WORKLOG.md](docs/WORKLOG.md) | Dated record of work, newest first. |
 | [docs/archive/](docs/archive/) | The previous implementation's analysis. Describes a deleted codebase — see the archive README. |
 | [CLAUDE.md](CLAUDE.md) | Orientation for Claude Code sessions. |

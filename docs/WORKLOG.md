@@ -4,6 +4,65 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (market scan) — a competitor's collapse is the most useful data we have
+
+Searched the Roblox catalogue, Rolimon's, DevForum and Wikipedia's game list to answer "does
+this already exist". Written up in [07-market-scan.md](07-market-scan.md).
+
+### The headline
+
+**Dino Hunters** (Fishgig Game) — cited in the GDD's own §14 as a reference — is now the
+nearest competitor, and its curve is the finding:
+
+| | |
+|---|---|
+| Peak CCU, 21 Jul 2026 | **16,766** |
+| 30-day average | 2,957 |
+| 7-day average | 1,821 |
+| At scan | 1,280 |
+
+26.9M visits, 92.5% rating, 60k favourites, updated hourly — and still down ~92% from peak in
+two months. **Demand for a dinosaur shooter with egg collection is proven at 16.7k concurrent;
+retention is where it dies.**
+
+### Three things that change our thinking
+
+1. **The collection loop is table stakes, not a differentiator.** Eggs, hatching, rarity and
+   mutations are already occupied by Dino Hunters, Dino Egg Farm, Collect Dinos and Grow a
+   Garden's prehistoric event. The GDD treats the hatchery as the retention hook; the market
+   says it is the price of entry.
+2. **The wave layer is a commodity.** "Dino Defenses" is a *template for sale* on BuiltByBit —
+   endless scaling dinosaur waves, bosses every 10 waves, grid building, turrets, mobile-ready.
+   Most of our Phases 1-3 can be bought this afternoon.
+3. **The moat is the exploration window.** Nothing found combines a losable defended objective,
+   timed exploration gated on boss *and* resource, survivor escort, and a finite run with a
+   real win. Competitors are endless, open-world, or pure collection. The GDD's most
+   distinctive idea is also the next thing we build.
+
+### Retention advice, and how it lands on us
+
+DevForum, from developers with the same D1/D7 problem: daily rewards do not fix retention;
+**repetitiveness is the named killer**; onboarding is the lever; ask the players who quit.
+
+This promotes our archived risk #3 ("twenty waves may feel samey") from theoretical to
+**observed cause of a competitor's collapse** — and it sharpens the Phase 3 number: waves
+clear in **14-32s** with composition as the only variable. Twenty short, structurally
+identical waves is exactly that failure.
+
+Raised **D-15**: `Config.Waves` already carries an authored `Event` per wave — "River Breach
+opens", "Power outage 25s", "No repair until clear". Only the lane openings are implemented;
+the rest print and do nothing. Those events are the GDD's own variety mechanism and are cheap
+now, expensive after twenty waves are tuned.
+
+### Also raised
+
+**D-14 — the place name collides.** "Dino Hunt" versus "Dino Hunters" (26.9M visits, created
+three months ago). Search will bury us and players may read us as a clone. Already solved by
+the GDD's own product name, **Primal Rift: Outpost Siege**; the place just needs renaming
+before it is ever published.
+
+---
+
 ## 2026-09-28 (Phase 3 complete) — the reactor is the objective
 
 **Phase 3 is 11/11. The project is 37/74 (48%).** Exit gate met: a run can be won (Phase 2's

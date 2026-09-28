@@ -11,6 +11,40 @@ When a decision is made, move it down with the date and the reasoning.
 
 ## Open
 
+### D-14 — The place name collides with a live competitor
+
+The place is called **Dino Hunt**. **Dino Hunters** (Fishgig Game) has 26.9M visits, was
+created ~June 2026 and is updated hourly. Roblox search for "Dino Hunt" will surface it above
+us indefinitely, and players may read us as a clone.
+
+**Already solved, just needs applying:** the GDD's product name is **Primal Rift: Outpost
+Siege**, which collides with nothing found in the scan. Rename the place before publishing;
+`Dino Hunt` / `Dino-Hunt` can stay as the internal directory and repo name.
+
+**Options.** (a) Rename the place to Primal Rift: Outpost Siege. (b) Pick a third name.
+(c) Keep Dino Hunt and accept the search collision.
+
+**Blocks:** nothing now; blocks publishing. See [07-market-scan.md](07-market-scan.md) §5.
+
+---
+
+### D-15 — Are authored wave events content or flavour text?
+
+`Config.Waves` carries an `Event` string per wave — "River Breach opens", "Power outage 25s",
+"No repair until clear". Only the lane openings are implemented; the rest print to the log and
+do nothing.
+
+The market scan makes this urgent rather than cosmetic: repetition is the named cause of
+competitor churn, waves currently clear in 14-32s, and composition is the only thing that
+varies between them. These events are the GDD's own variety mechanism.
+
+**Options.** (a) Implement them as they arise, phase by phase. (b) Batch them into Phase 6.
+(c) Drop them and find variety elsewhere.
+
+**Blocks:** nothing, but it is cheap now and expensive to retrofit after twenty waves are tuned.
+
+---
+
 ### D-12 — Creature rigging approach
 
 The previous project's fatal content problem was that 20 creatures need non-humanoid rigs and
