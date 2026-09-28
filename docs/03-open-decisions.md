@@ -3,141 +3,102 @@
 Blocking questions first, then the log of what has been settled.
 When a decision is made, move it down with the date and the reasoning.
 
+> **Reset 2026-09-28.** The project restarted greenfield. Decisions D-01 through D-06 concerned
+> the deleted Area 51 codebase and are recorded at the bottom as superseded — several resolved
+> themselves by the restart.
+
 ---
 
 ## Open
 
-### D-01 — Match shape: 300 endless waves vs 20 finite
+### D-10 — Roblox Studio MCP not connected
 
-**Conflict.** The whole wave pipeline — table, generator, cycle multipliers, per-wave caps —
-assumes an endless ladder across six difficulty cycles. Primal Rift's pacing, unlock gates
-and KPI targets all assume a finite 28-38 minute run ending in victory at Wave 20.
+No Studio server is reachable from the session. The previous bridge disconnected and the
+official Roblox MCP has not been connected in its place.
 
-Waves 1-20 of the existing table are not transferable either: existing Wave 1 spawns
-**5 aliens**, the spec's Wave 1 wants **17 dinosaurs**.
-
-**Options.** (a) Author a new finite 20-wave table in the same shape and retire the cycles.
-(b) Keep the endless ladder and treat Wave 20 as a soft milestone rather than a win.
-
-**Blocks:** all wave work, boss gating, exploration timing, every KPI.
+**Blocks:** all Studio work — blockout, play-testing, inspection. Phase 0 cannot complete.
 
 ---
 
-### D-02 — Wave table ownership
+### D-11 — Where the Dino Hunt place lives
 
-**Conflict.** `ReplicatedStorage.WaveTable` is generated from `docs/AREA51_WAVE_TABLE.md` by
-`tools/gen_wavetable.js`. Its header states plainly that hand-editing the numbers will drift
-the design file and the game apart. **Neither the doc nor the tool is in this repo.**
+Unknown whether Dino Hunt is a new place inside an existing universe or a new universe, and
+whether it has been saved to Roblox or only exists locally. Rojo needs a known target and the
+team needs a known publish destination.
 
-**Options.** (a) Bring that generator repo into this project and keep the pipeline.
-(b) Primal Rift formally takes ownership of the table in-place and the generator is retired.
-
-Not both. Whichever is chosen, the WaveTable header comment must be rewritten to say so.
-
-**Blocks:** D-01, and any edit to wave composition.
+**Blocks:** Phase 0 sync verification.
 
 ---
 
-### D-03 — Defended objective
+### D-12 — Creature rigging approach
 
-**Conflict.** There is no central objective in the place today, so the spec's primary fail
-condition (reactor reaches zero HP) has no implementation. It also has no numbers: reactor
-HP, per-enemy reactor damage and repair rate/cost are undefined in the spec too.
+The previous project's fatal content problem was that 20 creatures need non-humanoid rigs and
+animation sets, and nothing existed to reuse. That has not changed — greenfield makes it
+starker, since there are now no rigs at all.
 
-Enemies already carry a `gearDamage` stat for hitting structures, so the targeting change is
-small. The state machine, failure flow and the numbers are not.
+**Options.** (a) Part-built grey-box rigs now, commission or buy final art later.
+(b) Buy a low-poly dinosaur asset pack up front and rig against its skeletons.
+(c) Build custom rigs in Blender — a Blender MCP is available in this session.
 
-**Needs:** a decision to build it, plus the three missing numbers.
-
-**Blocks:** sector gating, the Amber gauge, the entire loss condition.
-
----
-
-### D-06 — Game code has no version control
-
-**Consequence of the 2026-09-06 decision below.** With no Rojo sync and the place as sole
-source of truth, the Luau in Dino Valley lives only inside a `.rbxl`. There is no history, no
-diff, no rollback and no review — on a codebase we are about to make large, destructive
-changes to. Studio's own version history is the only safety net, and it is coarse.
-
-This does not argue against editing over MCP. It argues for a **one-way export**: periodically
-read every script out of the place and commit the text to `src/` in this repo. Nothing syncs
-back, so the workflow is unchanged — but every change becomes diffable and recoverable.
-
-**Options.** (a) Export before and after each work session. (b) Export at milestones only.
-(c) Accept the risk and rely on Studio history.
-
-**Blocks:** nothing, but the value is highest *before* the first destructive change, not after.
+**Blocks:** nothing before Phase 1, but it determines whether Phase 1's placeholder work is
+throwaway or foundational.
 
 ---
 
-### D-04 — The second, unused codebase
+### D-13 — Package versions
 
-**Conflict.** `ReplicatedStorage.Shared` holds a parallel, largely dead scaffold from an
-unrelated SWAT project: `Net`, `Validate`, `RateLimiter`, `Signal`, `Loader`, `Config`,
-`Enums`, `WeaponConfig`, `GearConfig`, `AttachmentConfig`, `MissionConfig`, `Progression`,
-`RankConfig`. Its GearConfig sells a "Standard-issue SWAT uniform" and carries phase markers
-`P2-1` / `P4-5`. `Blaster.Constants` notes a field there exists but "no code reads it".
+Fusion's API changed significantly at 0.3 (explicit scopes, `peek`). The pinned version
+determines how every UI module is written, and Nevermore's package set needs deciding rather
+than pulling wholesale.
 
-**Options.** (a) Adopt it as Primal Rift's service spine and migrate onto it.
-(b) Delete it.
-
-Leaving two shared layers in place is how the codebase becomes unnavigable.
-
-**Blocks:** nothing immediately, but gets more expensive to resolve the longer it waits.
-
----
-
-## Also unresolved — from the spec itself
-
-These are recorded in [01-gdd-review.md](01-gdd-review.md) and need answers before the
-systems that depend on them are built. They are not blocking today.
-
-- Pacing budget overruns its own target (34-46 min against a stated 28-38).
-- Amber thresholds are flat while income scales with party size.
-- Boss HP scaling makes co-op easier than solo.
-- Solo downed-state rules contradict each other.
-- Weapon gating: by wave or by Hunter Level?
-- Reactor HP, repair rate and cost — no numbers.
-- Player defense progression — none exists across 20 waves.
-- Late Amber gauge fill: does an exploration window open mid-wave?
-- Parallel egg incubation: one hatchery slot or many?
-- DNA carry and theft mechanics.
+**Resolve during Phase 0**, and record the pins here.
 
 ---
 
 ## Decided
 
-### 2026-09-06 — The place is the source of truth; MCP is the editing path
+### 2026-09-28 — Greenfield rebuild on Fusion and Nevermore
 
-`Roblox-Zombie-Arena` will **not** be Rojo-synced into Dino Valley. All iteration happens
-directly in the place over the Studio MCP bridge.
+The Area 51 reskin is abandoned; the place was deleted. Rebuild from scratch in the new
+**Dino Hunt** place using Fusion for UI and Nevermore for architecture.
 
-**Reasoning:** confirmed by the user. Removes the risk that direct MCP edits get silently
-overwritten by a sync.
+**Reasoning:** user judgement that the inherited codebase was not good enough to carry.
 
-**Consequence — see D-06.** The game code now has no version control at all.
+### 2026-09-28 — The filesystem is the source of truth
 
-### 2026-09-05 — Build target is the Dino Valley place
+Code lives in `src/`, Rojo syncs into Studio, and all gameplay code is in git. The Studio MCP
+inspects and tests but does not author, except for world geometry committed as `.rbxmx`.
 
-Primal Rift ships into the existing **Dino Valley** place, placeId `88638180383535`.
-Confirmed by the user.
+**Reasoning:** Fusion and Nevermore are Wally-distributed and expect a filesystem project, so
+the toolchain forces this — and it closes the version-control gap that superseded D-06 raised.
 
-### 2026-09-05 — Reskin in place, incrementally
+### 2026-09-28 — The GDD remains the spec
 
-Keep `GameManager` / `WaveManager` / `ZombieAI` / `Blaster` and evolve them into the spec,
-renaming and extending rather than rewriting.
+Same game design, new codebase. The defect review in
+[01-gdd-review.md](01-gdd-review.md) and the 64 functional requirements in
+[archive/05-sdlc-plan.md](archive/05-sdlc-plan.md) both still apply.
 
-**Reasoning:** fastest path to a playable dino build, and roughly half the spec's
-architecture already exists. **Accepted cost:** the alien game is overwritten as we go, and
-there is no preserved fallback copy.
+### 2026-09-28 — Fusion for UI, Nevermore for architecture
 
-### 2026-09-05 — Map before building
+The two overlap; the split is a rule. Fusion owns the client view layer. Nevermore owns
+ServiceBag, Binder, Maid, Signal and Rx. Blend is not used.
 
-First work item is a system-by-system gap analysis rather than starting the vertical slice.
-Delivered as [02-conversion-map.md](02-conversion-map.md).
+**Reasoning:** avoids two reactive paradigms tangled through one codebase.
 
-### 2026-09-05 — Version control on GitHub
+### 2026-09-06 — Version control on GitHub
 
-Repo is `syedayeshulhassanbukhari/Dino-Hunt`. This repo holds documentation, decisions and
-design data — not a Rojo source sync. Place edits go through the Studio MCP bridge.
+Repo is `syedayeshulhassanbukhari/Dino-Hunt`, branch `master`. Now holds game code as well as
+documentation.
+
+---
+
+## Superseded by the 2026-09-28 restart
+
+| ID | Was | Outcome |
+|---|---|---|
+| D-01 | 300 endless waves vs 20 finite | Moot — greenfield builds 20 finite per the spec |
+| D-02 | Wave table generator ownership | Moot — no inherited table exists |
+| D-03 | Defended objective | Still required, now a clean build (Phase 3) |
+| D-04 | Dead SWAT framework layer | Moot — deleted with the place |
+| D-05 | Rojo sync vs MCP iteration | **Reversed.** Rojo now syncs; see 2026-09-28 above |
+| D-06 | Game code had no version control | **Resolved** by the filesystem source of truth |

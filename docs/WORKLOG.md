@@ -1,6 +1,53 @@
 # Work log
 
-Newest first. One entry per session that changes the place, the docs or a decision.
+Newest first. One entry per session that changes code, the docs or a decision.
+
+---
+
+## 2026-09-28 — Greenfield restart
+
+The Dino Valley place was deleted and the project restarted from scratch in a new blank place
+called **Dino Hunt**. The design is unchanged; only the implementation.
+
+### Decided
+
+- **Greenfield rebuild** on Fusion (UI) and Nevermore (architecture).
+- **The filesystem is the source of truth** — Rojo syncs `src/` into Studio, so all gameplay
+  code now lives in git. This reverses the old MCP-authoring arrangement, because Fusion and
+  Nevermore are Wally-distributed and expect a filesystem project. It also closes the
+  version-control gap the old D-06 raised.
+- **The GDD remains the spec.** The defect review and the 64 functional requirements carry
+  forward untouched.
+- **Framework split is a rule:** Fusion owns the client view layer; Nevermore owns ServiceBag,
+  Binder, Maid, Signal and Rx. Blend is not used.
+
+### Done
+
+- Wrote [06-project-plan.md](06-project-plan.md) — stack, repo layout, conventions, grey-box
+  scope and a six-phase plan (26–31 days).
+- **Rewrote CLAUDE.md**, which described the deleted codebase and would have misled every
+  future session.
+- Archived `02-conversion-map.md`, `04-inventory.md` and `05-sdlc-plan.md` to `docs/archive/`
+  with a README explaining what in them survives. The 64 FRs and the exit criteria in 05 are
+  still valid — only its timeline and module-status sections are dead.
+- Reset the decisions doc: D-01…D-06 marked superseded, four new open items raised.
+
+### Carried forward from the deleted codebase
+
+The code is gone, the good ideas are not: derived stats from a single `lp` weight with
+sub-linear damage; one server-wide concurrency cap; directional armour; and the invariants
+(wave-1 dies to one shot, everything is outrunnable, nothing one-shots a full-health player).
+
+### Blocked
+
+- **D-10** — no Roblox Studio MCP is connected. The previous bridge disconnected and the
+  official server has not replaced it. Phase 0 cannot complete without it.
+- **D-11** — unknown where the Dino Hunt place lives (new universe or existing) and whether
+  it is saved to Roblox.
+
+### Next
+
+Phase 0: connect the MCP, install and pin the toolchain, prove the Rojo round trip.
 
 ---
 
