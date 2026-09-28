@@ -4,6 +4,36 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-28 (Phase 2, playtest 1) — ammo feedback
+
+### From the user's log
+
+- Verified: boot (4 services), match start, 10s intermission exactly, **wave 1 = 17
+  creatures on 1 lane**, HUD phase `Intermission`, 9 kills in ~3s through the real path.
+  **DH-022 and DH-024 Done.**
+- Not reached: `wave 1 cleared`. The user stopped at +31s with 8 alive, after **22 seconds
+  with no shots landing**. 18 confirmed hits plus misses against a 30-round magazine: almost
+  certainly an empty mag. The server dropped shots silently, the client kept drawing tracers,
+  and nothing said "press R". The gun looked broken.
+
+### Fixed
+
+- `HitConfirm` now carries `ammoLeft` on every reply, and two new kinds: `empty` (throttled
+  to one per second — auto-fire would otherwise send seven) and `reloaded`.
+- `RifleClient` auto-requests a reload on `empty` and prints ammo on every confirm:
+  `[Rifle] hit (24 left)`, `[Rifle] empty — reloading`, `[Rifle] reloaded (30)`.
+- `WaveService` prints `wave N fully spawned — 17 creatures in 2.5s, held by cap on 0 tick(s)`
+  so batched spawning (DH-023) has log evidence rather than an assumption.
+
+Both server modules load clean in edit. Snapshot re-exported.
+
+### Still to verify
+
+`wave 1 cleared`, the 15s intermission before wave 2, the River Breach lane opening at 6,
+and (eventually) VICTORY. DH-021/023/029/030 stay In progress.
+
+---
+
 ## 2026-09-28 (Phase 2 written) — the wave loop, awaiting playtest logs
 
 **Working agreement changed:** the user runs the game; Claude does not start playtests.
