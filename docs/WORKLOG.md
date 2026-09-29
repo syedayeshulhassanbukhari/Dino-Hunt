@@ -4,6 +4,49 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-09-29 — status file, and a second developer joining
+
+Wrote [08-status.md](08-status.md): where the project is, what works, what is left, and how
+two people divide it. Linked from the README as the new starting point.
+
+**40 of 75 tasks, 21.0 of 40.4 estimated days — 52% by effort.** Phases 0-3 complete and
+playtest-verified; Phase 4 boss built and retuned, exploration not started.
+
+### The problem a second person creates
+
+Raised **D-16**, which blocks both developers. The source of truth is a single live place
+edited over MCP: no branches, no merges, no locking. Two people in `CreatureService` at once
+means one silently overwrites the other, and `snapshot/*.rbxm` is a binary blob git cannot
+merge either — two snapshot commits produce a conflict only one side can win.
+
+This follows directly from dropping Rojo. Right call for one person; does not scale to two.
+Options are Team Create plus per-service ownership, reinstating Rojo, or splitting by place.
+Recommended Team Create now, Rojo if this runs for months.
+
+**Concrete prerequisite either way: split `UI.Hud` into one module per panel.** It is already
+the worst hotspot — every feature adds to it — and it is one large file. Half a day, and it
+removes the likeliest source of lost work.
+
+### Parallelisation, from the dependency graph
+
+Phase 6's player systems are **unblocked right now**: classes depend on DH-021 and downed
+state on DH-020, both long done. So Phase 4 exploration + Phase 5 collection can run as one
+track while Phase 6 player systems run as another, touching largely disjoint files.
+
+Phase 5's stated dependency on DH-050 is about *testing* inside an exploration window, not
+construction — escort AI and the nest guardian can be built before exploration exists.
+
+### Honest accounting recorded in the status file
+
+- The HUD is marked done on functional evidence only. **Nobody has looked at it critically.**
+- **DH-075 has never been observed working.** Creature-on-player damage is implemented and
+  load-checked, but across every playtest the player never stood within AttackRange.
+- Two design questions remain unanswered: whether a lone player should be able to hold a lane
+  (14 of 17 creatures reached the reactor on wave 1 while being shot at), and whether a boss
+  should attack the reactor (Boss 1 chewed ~2,360 of 5,000 HP over a 187s fight).
+
+---
+
 ## 2026-09-28 (Phase 4a, playtest 1) — the boss works; three numbers were wrong
 
 Every system fired. `DH-042`, `DH-043`, `DH-044` done. The value of the run was the three

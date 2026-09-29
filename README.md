@@ -4,7 +4,8 @@ Cooperative dinosaur wave-survival shooter for Roblox. 1–6 players defend an A
 research outpost through 20 waves, clear bosses, rescue survivors, recover eggs from guarded
 nests and hatch permanent baby dinosaur companions.
 
-**Status:** greenfield rebuild, Phase 0 (toolchain). Started 2026-09-28.
+**Status:** Phases 0-3 complete and playtest-verified, Phase 4 half built. **40 of 75 tasks, 52% by effort.**
+See [docs/08-status.md](docs/08-status.md).
 
 ## Stack
 
@@ -16,7 +17,8 @@ Code lives in `src/` and syncs into Studio via Rojo. The filesystem is the sourc
 
 | File | Contents |
 |---|---|
-| [docs/06-project-plan.md](docs/06-project-plan.md) | **Start here.** Stack, architecture, repo layout, grey-box scope, phase plan. |
+| [docs/08-status.md](docs/08-status.md) | **Start here.** How much is done, what is left, and how two people split the work. |
+| [docs/06-project-plan.md](docs/06-project-plan.md) | Stack, architecture, repo layout, grey-box scope, phase plan. |
 | [Primal_Rift_MVP_Game_Design_Document.docx](Primal_Rift_MVP_Game_Design_Document.docx) | The design spec. v1.1, 26 Aug 2026. |
 | [docs/01-gdd-review.md](docs/01-gdd-review.md) | Review of that spec — contradictions, missing numbers, balance defects. Read before implementing anything it touches. |
 | [docs/03-open-decisions.md](docs/03-open-decisions.md) | Decisions that block work, and the log of settled ones. |

@@ -11,6 +11,30 @@ When a decision is made, move it down with the date and the reasoning.
 
 ## Open
 
+### D-16 — Two people, one live place, no branching
+
+**Blocks both developers.** A second developer is joining (2026-09-29).
+
+The source of truth is a single live Roblox place edited over MCP. There are no branches, no
+merges and no locking: two people editing `CreatureService` at once means one silently
+overwrites the other. The `snapshot/*.rbxm` is a binary blob, so git cannot merge it either —
+two people committing snapshots produces a conflict only one side can win.
+
+This is a direct consequence of dropping Rojo. That was the right call for one person and does
+not scale to two.
+
+**Options.** (a) Team Create plus strict per-service file ownership, one person owning snapshot
+commits. (b) Reinstate Rojo — code returns to the filesystem and git does the merging; costs
+about a day of cut Phase 0 work and changes the established workflow. (c) Split by place: one
+owns the main place, the other hands over `.rbxm` assets.
+
+Recommended: **(a) now, (b) if the project runs for months.** Either way, split
+`UI.Hud` into one module per panel first — it is the worst hotspot and a single large file.
+
+Full reasoning and the proposed ownership table: [08-status.md](08-status.md) §4.
+
+---
+
 ### D-14 — The place name collides with a live competitor
 
 The place is called **Dino Hunt**. **Dino Hunters** (Fishgig Game) has 26.9M visits, was
