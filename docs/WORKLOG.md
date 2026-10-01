@@ -4,6 +4,55 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-10-01 (later) — tracker rebuilt from the audit; remaining-task list
+
+The tracker disagreed with the place, so it was rebuilt from the
+[audit](09-gdd-coverage.md) rather than a new list written alongside it. Readable version:
+[10-remaining-tasks.md](10-remaining-tasks.md).
+
+### What changed in the tracker
+
+**75 tasks to 109.** The audit found both more done and more missing than the old plan knew
+about.
+
+- Added a status value the audit made necessary: **Built (unverified)**. Twenty-four tasks are
+  now in it — code exists in the place and has never been observed running. Previously these
+  were indistinguishable from "not started", which badly understated progress, or from "done",
+  which badly overstated confidence.
+- Set the whole of Phase 5 and the player half of Phase 6 to Built (unverified), matching what
+  the audit actually found in the place.
+- Added 34 new tasks: a verification sweep (DH-076 to DH-089), the missing GDD systems as a new
+  **Phase 7 — GDD completion** (DH-090 to DH-102), hardening (DH-103 to DH-107) and process
+  (DH-108, DH-109).
+
+| Status | Tasks | Days |
+|---|---|---|
+| Done | 41 | 22.25 |
+| Built (unverified) | 24 | 13.40 |
+| Not started | 40 | 25.10 |
+| **Total** | **109** | **62.00** |
+
+**~38.5 days remain, of which 13.4 is verifying code that already exists** — the cheapest
+third of the work and the most valuable.
+
+### The shape of the advice
+
+Priority 1 is making what exists trustworthy, and it starts with two half-day tasks that
+unlock everything after them: **DH-076** wires the 20 unused creature rigs, and **DH-077**
+adds dev commands to reach each unverified system. Without the first, six species are
+identical boxes and no observation about target priority means anything. Without the second,
+every verification needs a full run to reach the thing being tested.
+
+### Raised D-17 — the weapon roster has diverged
+
+Five guns exist and none are the GDD's. Its twenty elemental weapons, heat-instead-of-reload,
+charge mechanics, three melee weapons and the stamina system do not exist. §8 is therefore not
+25% done — it is a different, smaller roster, and filling it in incrementally would quietly
+discard the spec's "every weapon has a job" pillar. Blocks ~4 days of weapon work and
+acceptance item 4.
+
+---
+
 ## 2026-10-01 — GDD coverage audit; the place has moved well ahead of the docs
 
 Audited the live place against the GDD rather than against our own thinned plan. Written up in

@@ -11,6 +11,28 @@ When a decision is made, move it down with the date and the reasoning.
 
 ## Open
 
+### D-17 — The weapon roster has diverged from the GDD
+
+Five guns exist — `AWP`, `M4A1`, `P320`, `UMP-45`, `Tactical M1014` — and **none of them are
+the GDD's.** §8 specifies twenty: Standard Pistol, Tactical Revolver, Suppressed Pistol, SMG,
+Shotgun, Flame SMG, Toxic Shotgun, Galaxy Rifle, Frost Blaster, Toxic Sniper, Plasma Blaster,
+Energy Rifle, Charge Rifle, Plasma Cannon, Dual Energy Cannon, Rocket Launcher and the rest —
+with elemental effects, heat instead of reload, and charge mechanics. Plus three melee weapons
+and a stamina system. None of that exists.
+
+So §8 is not 25% complete; it is a different, smaller roster. Filling it in one gun at a time
+would quietly discard the spec's "every weapon has a job" pillar and its elemental status
+system (§5.2, §8.4).
+
+**Options.** (a) Adopt the GDD's twenty and retire the current five. (b) Keep the real-world
+direction and rewrite §8, deciding explicitly what replaces the elemental roles. (c) Hybrid —
+keep the five as the conventional tier and add the GDD's experimental tier above them.
+
+**Blocks:** DH-100, DH-101, DH-102 — about 4 days of weapon work. Also blocks acceptance
+item 4.
+
+---
+
 ### D-16 — Two people, one live place, no branching
 
 **Blocks both developers.** A second developer is joining (2026-09-29).

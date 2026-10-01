@@ -4,8 +4,9 @@ Cooperative dinosaur wave-survival shooter for Roblox. 1–6 players defend an A
 research outpost through 20 waves, clear bosses, rescue survivors, recover eggs from guarded
 nests and hatch permanent baby dinosaur companions.
 
-**Status:** Phases 0-3 complete and playtest-verified, Phase 4 half built. **40 of 75 tasks, 52% by effort.**
-See [docs/08-status.md](docs/08-status.md).
+**Status:** 41 of 109 tasks verified, 24 more built but unobserved, ~38.5 days remaining.
+See [docs/10-remaining-tasks.md](docs/10-remaining-tasks.md) for what is left and
+[docs/09-gdd-coverage.md](docs/09-gdd-coverage.md) for coverage against the GDD.
 
 ## Stack
 
@@ -24,6 +25,7 @@ There is no `src/` directory. See [CLAUDE.md](CLAUDE.md).
 | [Primal_Rift_MVP_Game_Design_Document.docx](Primal_Rift_MVP_Game_Design_Document.docx) | The design spec. v1.1, 26 Aug 2026. |
 | [docs/01-gdd-review.md](docs/01-gdd-review.md) | Review of that spec — contradictions, missing numbers, balance defects. Read before implementing anything it touches. |
 | [docs/03-open-decisions.md](docs/03-open-decisions.md) | Decisions that block work, and the log of settled ones. |
+| [docs/10-remaining-tasks.md](docs/10-remaining-tasks.md) | **What is left**, prioritised. Agrees with the tracker. |
 | [docs/09-gdd-coverage.md](docs/09-gdd-coverage.md) | Progress measured against the GDD's full MVP scope, not our thinned plan. |
 | [docs/07-market-scan.md](docs/07-market-scan.md) | Who else is making this on Roblox, and what their numbers say. |
 | [docs/WORKLOG.md](docs/WORKLOG.md) | Dated record of work, newest first. |
