@@ -9,9 +9,11 @@ See [docs/08-status.md](docs/08-status.md).
 
 ## Stack
 
-Rojo · Wally · **Fusion** (UI) · **Nevermore** (architecture) · Luau strict
+**Fusion 0.3** (UI) · hand-written `Maid` / `Signal` / `ServiceBag` · Luau strict
 
-Code lives in `src/` and syncs into Studio via Rojo. The filesystem is the source of truth.
+**No Rojo, no Wally, no Nevermore** — all three were dropped on 2026-09-28. Code is authored
+directly in the Dino Hunt place over the Studio MCP, and **the place is the source of truth**.
+There is no `src/` directory. See [CLAUDE.md](CLAUDE.md).
 
 ## Documents
 
@@ -22,6 +24,7 @@ Code lives in `src/` and syncs into Studio via Rojo. The filesystem is the sourc
 | [Primal_Rift_MVP_Game_Design_Document.docx](Primal_Rift_MVP_Game_Design_Document.docx) | The design spec. v1.1, 26 Aug 2026. |
 | [docs/01-gdd-review.md](docs/01-gdd-review.md) | Review of that spec — contradictions, missing numbers, balance defects. Read before implementing anything it touches. |
 | [docs/03-open-decisions.md](docs/03-open-decisions.md) | Decisions that block work, and the log of settled ones. |
+| [docs/09-gdd-coverage.md](docs/09-gdd-coverage.md) | Progress measured against the GDD's full MVP scope, not our thinned plan. |
 | [docs/07-market-scan.md](docs/07-market-scan.md) | Who else is making this on Roblox, and what their numbers say. |
 | [docs/WORKLOG.md](docs/WORKLOG.md) | Dated record of work, newest first. |
 | [docs/archive/](docs/archive/) | The previous implementation's analysis. Describes a deleted codebase — see the archive README. |

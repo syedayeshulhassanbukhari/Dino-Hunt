@@ -4,6 +4,77 @@ Newest first. One entry per session that changes code, the docs or a decision.
 
 ---
 
+## 2026-10-01 — GDD coverage audit; the place has moved well ahead of the docs
+
+Audited the live place against the GDD rather than against our own thinned plan. Written up in
+[09-gdd-coverage.md](09-gdd-coverage.md).
+
+### The place contains far more than the docs describe
+
+Eight services, five config modules, seven UI modules and twenty named creature rigs exist
+that were not there on 2026-09-29: `HatcheryService` (561 lines), `SurvivorService` (458),
+`DownedService` (380), `DataService` (297), `ClassService` (238), `ExplorationService` (208),
+`PerkService` (192), `CodexService` (99), plus `Config.{Audio,Classes,Eggs,Perks,Survivors}`
+and `UI.{Announcer,Class,Codex,Combat,Compass,Perks,Status}`.
+
+These are real implementations, not stubs — no TODO markers, 5 to 21 functions each.
+`DataService` genuinely uses DataStoreService with `UpdateAsync`, session locking and schema
+versioning. **[08-status.md](08-status.md) and the task tracker are both stale** and need
+re-syncing against the place.
+
+### Coverage against the GDD
+
+Three numbers rather than one, because a single figure hides the shape:
+
+| | |
+|---|---|
+| Systems — does the machinery exist | ~75% |
+| Content — is there enough of it | ~45% |
+| Verification — is it proven to work | ~25% |
+| **GDD's own acceptance checklist (§12.3)** | **0 of 15 fully met**, 9 substantially built |
+
+**The most important fact: nine of the fifteen acceptance items are "built but never
+observed."** The gap between written and verified is now a bigger risk than any missing
+feature — unverified code is of unknown value.
+
+### The finding most likely to surprise
+
+`ServerStorage.Assets.Creatures` holds **20 named rigs** — every GDD species plus five boss
+rigs. **None are used.** `Config.Creatures` has no per-species `Rig` field, so all 15 species
+still resolve through their role to one of four grey-box rigs: Swarmer 2, Flanker 5,
+Armoured 6, Ranged 2.
+
+So acceptance item 2, "distinct silhouettes", fails *even though the art exists*. Six species
+are visually identical boxes. Wiring it is one field per species and should come before any
+more balance work — nothing learned about target priority is trustworthy while six creatures
+look the same.
+
+### Real gaps against the GDD
+
+- **Weapons: 5 of 20 guns, 0 of 3 melee** — and the five present (AWP, M4A1, P320, UMP-45,
+  Tactical M1014) are not the GDD's roster at all. The spec's elemental weapons, heat instead
+  of reload, and charge mechanics do not exist. This is a design decision, not a gap to fill
+  incrementally.
+- **No `AnalyticsService`** — listed as required in §11.1, and none of the 12 event types in
+  §12.1 are recorded, so no KPI can be measured.
+- **No FPS/TPS camera toggle** — §3.4 is nine requirement rows, none built.
+- **No onboarding** — §10.2's eight scripted steps are absent. The market scan named
+  onboarding as a retention lever.
+- **No buildable defenses** — Barricade, Ammo Crate, Shock Mine. "Barricade" appears only in a
+  wave event string and a perk description.
+- **No difficulty modes, mutations, mastery tracks or monetization.**
+- **Nothing has ever run with two players.** Six acceptance items say "in multiplayer".
+
+### Fixed in this commit
+
+- **`README.md`'s Stack section was actively misleading** — it still said Rojo, Wally and
+  Nevermore, and "code lives in `src/` … the filesystem is the source of truth". All reversed
+  on 2026-09-28. Dangerous with a second developer joining.
+- **Snapshot re-exported.** It predated everything above. Jumped 77 KB → 1.35 MB, which is the
+  creature rigs.
+
+---
+
 ## 2026-09-29 — status file, and a second developer joining
 
 Wrote [08-status.md](08-status.md): where the project is, what works, what is left, and how
